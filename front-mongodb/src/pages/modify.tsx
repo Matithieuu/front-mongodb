@@ -5,6 +5,7 @@ import { Customer } from "../types/customer";
 import { TypeOf, z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from 'react-router-dom';
 
 const customerSchema = z.object({
     username: z.string().min(1, "Full name is required").max(100),
@@ -15,6 +16,7 @@ export type CustomerInput = TypeOf<typeof customerSchema>;
 
 export default function Modify() {
     const { selectedCustomer, setSelectedCustomer } = useCustomerStore();
+    const navigate = useNavigate();
 
     const methods = useForm<CustomerInput>({
         resolver: zodResolver(customerSchema),
@@ -64,6 +66,11 @@ export default function Modify() {
                         <Grid item xs={12}>
                             <Button variant="contained" color="primary" type="submit">
                                 Save Changes
+                            </Button>
+                            <Button variant="contained" color="primary" style={{ marginLeft: "30px" }} onClick={() => {
+                                navigate("/");
+                            }}>
+                                Home
                             </Button>
                         </Grid>
                     </Grid>

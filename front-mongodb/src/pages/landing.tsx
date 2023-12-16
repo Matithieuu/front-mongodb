@@ -4,6 +4,7 @@ import { Customer, newCustommer } from "../types/customer";
 import { List, ListItem, ListItemText, Typography, Paper, Container, Tooltip, Button } from '@mui/material';
 import { useEffect, useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
+import SearchAppBar from "../components/searchBar";
 
 export default function Landing() {
     const [customers, setCustomers] = useState<Customer[]>([]);
@@ -24,6 +25,11 @@ export default function Landing() {
             <Typography variant="h3" component="h1" gutterBottom>
                 Customers
             </Typography>
+
+            <Paper elevation={3} style={{ padding: '20px', marginTop: '20px', marginBottom: "20px" }}>
+                <SearchAppBar />
+            </Paper>
+
             <Paper elevation={3} style={{ maxHeight: 400, overflow: 'auto' }}>
                 <List>
                     {customers.map(customer => (
