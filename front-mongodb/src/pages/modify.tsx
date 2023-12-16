@@ -18,6 +18,18 @@ export default function Modify() {
     const { selectedCustomer, setSelectedCustomer } = useCustomerStore();
     const navigate = useNavigate();
 
+    const modifyCustomer = async (customer: Customer) => {
+        const response = await fetch(`http://localhost:3000/api/customers/${customer._id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(customer),
+        });
+        const data = await response.json();
+        console.log(data);
+    }
+
     const methods = useForm<CustomerInput>({
         resolver: zodResolver(customerSchema),
         defaultValues: selectedCustomer ? {

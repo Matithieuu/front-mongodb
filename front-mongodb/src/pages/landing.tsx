@@ -11,8 +11,29 @@ export default function Landing() {
     const { setSelectedCustomer } = useCustomerStore();
     const navigate = useNavigate();
 
+    const fetchCustomers = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/api/customers", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            setCustomers(data);
+            console.log(data);
+        } catch (error) {
+            console.error("Failed to fetch customers:", error);
+        }
+    };
+
     useEffect(() => {
-        setCustomers(newCustommer);
+        fetchCustomers();
     }, [newCustommer]);
 
     const handleDelete = (id: string) => {

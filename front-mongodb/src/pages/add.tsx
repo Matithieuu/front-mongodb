@@ -1,12 +1,27 @@
 import { useState } from 'react';
 import { TextField, Typography, Paper, Container, Grid, Button } from '@mui/material';
+import { Customer } from '../types/customer';
 
 export default function AddCustomer() {
     const [customer, setCustomer] = useState({
+        _id: crypto.randomUUID(),
         username: '',
         address: '',
         // Add other customer fields as needed
     });
+
+    const addCustomer = async (customer: Customer) => {
+        const response = await fetch(`http://localhost:3000/api/customers`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Allow": "POST"
+            },
+            body: JSON.stringify(customer),
+        });
+        const data = await response.json();
+        console.log(data);
+    }
 
     const handleChange = (e: any) => {
         setCustomer({ ...customer, [e.target.name]: e.target.value });
@@ -14,7 +29,7 @@ export default function AddCustomer() {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        // Add logic to submit the customer data
+        addCustomer(customer);
         console.log(customer);
     };
 

@@ -13,24 +13,46 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom'; // Import from 'react-router-dom'
 import { useLocation } from 'react-router-dom';
 import { useCustomerStore } from '../store/customerStore';
-import { Customer, newCustommer } from '../types/customer';
-
-const initialCustomerData = {
-    newCustommer,
-};
+import { Customer } from '../types/customer';
+import { useEffect, useState } from 'react';
 
 /**
  * 
  * @returns A table of companies with their details for the search page
  */
 function TableOfDetails() {
-
+    const [customers, setCustomers] = useState<Customer[]>([]);
     const { setSelectedCustomer } = useCustomerStore();
 
     const navigate = useNavigate();
     const location = useLocation();
     const searchTerm = location.state.searchTerm.toString();
     console.log("Search term: ", searchTerm);
+
+    const fetchCustomers = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/customers/${searchTerm}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+    
+            const data = await response.json();
+            setCustomers(data);
+            console.log(data);
+        } catch (error) {
+            console.error("Failed to fetch customers:", error);
+        }
+    };    
+
+    useEffect(() => {
+        fetchCustomers();
+    }, [customers]);
 
     return (
 
@@ -47,7 +69,7 @@ function TableOfDetails() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {initialCustomerData.newCustommer.map((row: Customer) => (
+                    {customers.map((row: Customer) => (
                         <TableRow
                             key={row._id}
                             onClick={() => {
@@ -80,56 +102,49 @@ function TableOfDetails() {
  * @returns The search page
  */
 export default function Search() {
-    if (initialCustomerData.newCustommer.length === 0) {
-        return <div>Loading...</div>;
-    }
-    else if (initialCustomerData.newCustommer.length == null) {
-        return <div>No customer found</div>;
-    }
-    else {
-        return (
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
-                <Box
-                    component="main"
-                    sx={{
-                        backgroundColor: (theme) =>
-                            theme.palette.mode === 'light'
-                                ? theme.palette.grey[100]
-                                : theme.palette.grey[900],
-                        flexGrow: 1,
-                        height: '100vh',
-                        overflow: 'auto',
-                    }}
-                >
-                    <Typography fontFamily={"Poppins"} variant="h4" component="div" align="left" marginTop={10} marginLeft={7} marginBottom={5}>
-                        Search
-                    </Typography>
 
-                    <Grid container spacing={'3vh'} paddingBottom={'10vh'} paddingLeft={'10vh'} paddingRight={'10vh'} justifyContent="center">
+    return (
+        <Box sx={{ display: 'flex' }}>
+            <CssBaseline />
+            <Box
+                component="main"
+                sx={{
+                    backgroundColor: (theme) =>
+                        theme.palette.mode === 'light'
+                            ? theme.palette.grey[100]
+                            : theme.palette.grey[900],
+                    flexGrow: 1,
+                    height: '100vh',
+                    overflow: 'auto',
+                }}
+            >
+                <Typography fontFamily={"Poppins"} variant="h4" component="div" align="left" marginTop={10} marginLeft={7} marginBottom={5}>
+                    Search
+                </Typography>
+
+                <Grid container spacing={'3vh'} paddingBottom={'10vh'} paddingLeft={'10vh'} paddingRight={'10vh'} justifyContent="center">
 
 
-                        <Grid container spacing={3} justifyContent="space-between" marginTop={5}>
-                            <Grid item xs={12} md={12} >
-                                <Paper
-                                    sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        minHeight: 320,
-                                        height: '100%',
-                                        width: '100%',
-                                    }}
-                                >
-                                    <TableOfDetails />
-                                </Paper>
-                            </Grid>
+                    <Grid container spacing={3} justifyContent="space-between" marginTop={5}>
+                        <Grid item xs={12} md={12} >
+                            <Paper
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    minHeight: 320,
+                                    height: '100%',
+                                    width: '100%',
+                                }}
+                            >
+                                <TableOfDetails />
+                            </Paper>
                         </Grid>
                     </Grid>
-                </Box>
+                </Grid>
             </Box>
+        </Box>
 
-        );
-    }
+    );
 }
