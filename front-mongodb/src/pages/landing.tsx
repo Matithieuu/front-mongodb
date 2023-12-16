@@ -4,7 +4,6 @@ import { Customer } from "../types/customer";
 import { List, ListItem, ListItemText, Typography, Paper, Container, Tooltip, Button } from '@mui/material';
 import { useEffect, useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
-import SearchAppBar from "../components/searchBar";
 
 export default function Landing() {
     const [customers, setCustomers] = useState<Customer[]>([]);

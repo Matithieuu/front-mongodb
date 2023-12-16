@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { TextField, Typography, Paper, Container, Grid, Button } from '@mui/material';
 import { useCustomerStore } from "../store/customerStore";
 import { TypeOf, z } from 'zod';
