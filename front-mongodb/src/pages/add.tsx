@@ -4,14 +4,16 @@ import { Customer } from '../types/customer';
 
 export default function AddCustomer() {
     const [customer, setCustomer] = useState({
-        _id: crypto.randomUUID(),
+        _id: '',
         username: '',
+        name: 'dazdadza zad',
         address: '',
+        email: 'test@mail.com',
         // Add other customer fields as needed
     });
 
     const addCustomer = async (customer: Customer) => {
-        const response = await fetch(`http://localhost:3000/api/customers`, {
+        const response = await fetch(`http://localhost:8080/customer`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

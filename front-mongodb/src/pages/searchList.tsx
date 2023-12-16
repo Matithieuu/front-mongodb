@@ -4,7 +4,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { TableHead } from '@mui/material';
+import { Container, TableHead } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
@@ -31,31 +31,30 @@ function TableOfDetails() {
 
     const fetchCustomers = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/api/customers/${searchTerm}`, {
+            const response = await fetch(`http://localhost:8080/customer/${searchTerm}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-    
+
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
-    
+
             const data = await response.json();
             setCustomers(data);
             console.log(data);
         } catch (error) {
             console.error("Failed to fetch customers:", error);
         }
-    };    
+    };
 
     useEffect(() => {
         fetchCustomers();
-    }, [customers]);
+    }, []);
 
     return (
-
         <TableContainer style={{ minWidth: 220, minHeight: 220, width: '100%', height: '100%', borderRadius: 10 }}>
             <h1>
                 <a style={{ display: "flex", fontFamily: 'Poppins', justifyContent: 'center' }}>List of customers for the name: {searchTerm}</a>
@@ -74,7 +73,7 @@ function TableOfDetails() {
                             key={row._id}
                             onClick={() => {
                                 setSelectedCustomer(row as Customer);
-                                navigate(`/customer/${row._id}`, {
+                                navigate(`/customer/${row.username}`, {
                                 });
                             }}
                             sx={{
@@ -104,47 +103,32 @@ function TableOfDetails() {
 export default function Search() {
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Container>
             <CssBaseline />
-            <Box
-                component="main"
-                sx={{
-                    backgroundColor: (theme) =>
-                        theme.palette.mode === 'light'
-                            ? theme.palette.grey[100]
-                            : theme.palette.grey[900],
-                    flexGrow: 1,
-                    height: '100vh',
-                    overflow: 'auto',
-                }}
-            >
-                <Typography fontFamily={"Poppins"} variant="h4" component="div" align="left" marginTop={10} marginLeft={7} marginBottom={5}>
-                    Search
-                </Typography>
 
-                <Grid container spacing={'3vh'} paddingBottom={'10vh'} paddingLeft={'10vh'} paddingRight={'10vh'} justifyContent="center">
+            <Typography fontFamily={"Poppins"} variant="h4" component="div" marginTop={5} marginLeft={7} marginBottom={5}>
+                Search
+            </Typography>
 
-
-                    <Grid container spacing={3} justifyContent="space-between" marginTop={5}>
-                        <Grid item xs={12} md={12} >
-                            <Paper
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    minHeight: 320,
-                                    height: '100%',
-                                    width: '100%',
-                                }}
-                            >
-                                <TableOfDetails />
-                            </Paper>
-                        </Grid>
+            <Grid container spacing={'3vh'} paddingBottom={'10vh'} paddingLeft={'10vh'} paddingRight={'10vh'} justifyContent="center">
+                <Grid container spacing={3} justifyContent="space-between" marginTop={5}>
+                    <Grid item xs={12} md={12} >
+                        <Paper
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                minHeight: 320,
+                                height: '100%',
+                                width: '100%',
+                            }}
+                        >
+                            <TableOfDetails />
+                        </Paper>
                     </Grid>
                 </Grid>
-            </Box>
-        </Box>
-
+            </Grid>
+        </Container>
     );
 }

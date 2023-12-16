@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useCustomerStore } from "../store/customerStore";
-import { Customer, newCustommer } from "../types/customer";
+import { Customer } from "../types/customer";
 import { List, ListItem, ListItemText, Typography, Paper, Container, Tooltip, Button } from '@mui/material';
 import { useEffect, useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -13,7 +13,7 @@ export default function Landing() {
 
     const fetchCustomers = async () => {
         try {
-            const response = await fetch("http://localhost:3000/api/customers", {
+            const response = await fetch("http://localhost:8080/customers", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -32,11 +32,32 @@ export default function Landing() {
         }
     };
 
+    const deleteUser = async (id: string) => {
+        try {
+            const response = await fetch(`http://localhost:8080/customer/id/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error("Failed to delete customer:", error);
+        }
+    };
+
     useEffect(() => {
         fetchCustomers();
-    }, [newCustommer]);
+    }, []);
 
     const handleDelete = (id: string) => {
+        deleteUser(id);
         console.log("User deleted: " + id + "");
         setCustomers(customers.filter(customer => customer._id !== id));
     }
@@ -46,17 +67,13 @@ export default function Landing() {
             <Typography variant="h3" component="h1" gutterBottom>
                 Customers
             </Typography>
-
-            <Paper elevation={3} style={{ padding: '20px', marginTop: '20px', marginBottom: "20px" }}>
-                <SearchAppBar />
-            </Paper>
-
+            
             <Paper elevation={3} style={{ maxHeight: 400, overflow: 'auto' }}>
                 <List>
                     {customers.map(customer => (
 
                         <ListItem
-                            key={customer._id}
+                            key={crypto.randomUUID()}
                             style={{ marginBottom: 10 }}
                             onClick={() => {
                                 setSelectedCustomer(customer);

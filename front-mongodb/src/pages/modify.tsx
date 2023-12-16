@@ -1,15 +1,14 @@
 import { useEffect } from 'react';
 import { TextField, Typography, Paper, Container, Grid, Button } from '@mui/material';
 import { useCustomerStore } from "../store/customerStore";
-import { Customer } from "../types/customer";
 import { TypeOf, z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
+import { Customer } from '../types/customer';
 
 const customerSchema = z.object({
     username: z.string().min(1, "Full name is required").max(100),
-    address: z.string().min(10, "Address is required").max(100),
 })
 
 export type CustomerInput = TypeOf<typeof customerSchema>;
@@ -18,40 +17,49 @@ export default function Modify() {
     const { selectedCustomer, setSelectedCustomer } = useCustomerStore();
     const navigate = useNavigate();
 
-    const modifyCustomer = async (customer: Customer) => {
-        const response = await fetch(`http://localhost:3000/api/customers/${customer._id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(customer),
-        });
-        const data = await response.json();
-        console.log(data);
+    const modifyCustomer = async (updatedCustomer : Customer) => {
+        try {
+            const response = await fetch(`http://localhost:8080/customer`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id: updatedCustomer._id, username: updatedCustomer.username }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log(data);
+            setSelectedCustomer(updatedCustomer); // Mettre à jour l'état après la réponse réussie
+        } catch (error) {
+            console.error("There was a problem with the fetch operation:", error);
+        }
     }
 
     const methods = useForm<CustomerInput>({
         resolver: zodResolver(customerSchema),
         defaultValues: selectedCustomer ? {
             username: selectedCustomer.username,
-            address: selectedCustomer.address
         } : {}
     });
 
     const { handleSubmit, register, formState: { errors } } = methods;
 
-    useEffect(() => {
-        console.log(selectedCustomer);
-    }, [selectedCustomer]);
-
     const onHandleSubmit = (data: CustomerInput) => {
-        setSelectedCustomer(data as Customer);
-        console.log(data);
+        if (selectedCustomer && selectedCustomer._id) {
+            const updatedCustomer = { ...selectedCustomer, username: data.username };
+            modifyCustomer(updatedCustomer);
+        } else {
+            console.error("Selected customer is not available.");
+        }
     };
 
     return (
         <Container maxWidth="sm">
-            <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+            <Paper style={{ padding: '20px' }}>
                 <Typography variant="h4" gutterBottom>
                     Customer: {selectedCustomer?.username}
                 </Typography>
@@ -66,17 +74,9 @@ export default function Modify() {
                                 helperText={errors.username?.message}
                             />
                         </Grid>
+
                         <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Address"
-                                {...register('address')}
-                                error={!!errors.address}
-                                helperText={errors.address?.message}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button variant="contained" color="primary" type="submit">
+                            <Button variant="contained" color="primary" type='submit' >
                                 Save Changes
                             </Button>
                             <Button variant="contained" color="primary" style={{ marginLeft: "30px" }} onClick={() => {
