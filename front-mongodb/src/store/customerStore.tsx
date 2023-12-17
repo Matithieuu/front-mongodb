@@ -11,6 +11,3 @@ export const useCustomerStore = create<CustomerState>((set) => ({
     selectedCustomer: null,
     setSelectedCustomer: (Customer) => set(() => ({ selectedCustomer: Customer })),
 }));
-
-// Usage in components remains the same
-// const { selectedCompany, setSelectedCompany, ... } = useCompanyStore();

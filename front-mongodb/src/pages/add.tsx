@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { TextField, Typography, Paper, Container, Grid, Button } from '@mui/material';
 import { Customer } from '../types/customer';
 
+/**
+ * 
+ * @returns Add customer page
+ */
 export default function AddCustomer() {
     const [customer, setCustomer] = useState({
         _id: '',

@@ -47,7 +47,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-
+/**
+ * 
+ * @returns Search bar component redirecting to the search results page
+ */
 export default function SearchAppBar() {
 
     const navigate = useNavigate();

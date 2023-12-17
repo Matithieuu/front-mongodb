@@ -1,3 +1,6 @@
+/**
+ * Customer type
+ */
 export type Customer = {
     _id: string,
     username: string,

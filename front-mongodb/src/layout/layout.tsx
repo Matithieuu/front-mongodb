@@ -4,11 +4,7 @@ import SearchBar from '../components/searchBar';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import HomeIcon from '@mui/icons-material/Home';
-import { useNavigate } from 'react-router-dom';
-
-type Props = {
-    children: React.ReactNode;
-};
+import { Outlet, useNavigate } from 'react-router-dom';
 
 const darkTheme = createTheme({
     palette: {
@@ -64,7 +60,11 @@ function DarkModeToggle({ darkMode, toggleDarkMode }: { darkMode: boolean; toggl
     );
 }
 
-const Layout = ({ children }: Props) => {
+/**
+ * 
+ * @returns Layout component with the search bar and the dark mode toggle
+ */
+const Layout = () => {
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
     const [darkMode, setDarkMode] = React.useState(isDarkMode);
     const navigate = useNavigate();
@@ -112,7 +112,7 @@ const Layout = ({ children }: Props) => {
                 >
                     <Toolbar />
 
-                    {children}
+                    <Outlet />
 
                 </Stack>
 

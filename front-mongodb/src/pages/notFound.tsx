@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Container, Box, Typography, Button } from "@mui/material";
 
+/**
+ * 
+ * @returns 404 page
+ */
 export default function Page404() {
     const navigate = useNavigate();
 

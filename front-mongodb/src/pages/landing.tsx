@@ -5,6 +5,11 @@ import { List, ListItem, ListItemText, Typography, Paper, Container, Tooltip, Bu
 import { useEffect, useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
 
+
+/**
+ * 
+ * @returns Landing page with the list of customers
+ */
 export default function Landing() {
     const [customers, setCustomers] = useState<Customer[]>([]);
     const { setSelectedCustomer } = useCustomerStore();
@@ -66,7 +71,7 @@ export default function Landing() {
             <Typography variant="h3" component="h1" gutterBottom>
                 Customers
             </Typography>
-            
+
             <Paper elevation={3} style={{ maxHeight: 400, overflow: 'auto' }}>
                 <List>
                     {customers.map(customer => (

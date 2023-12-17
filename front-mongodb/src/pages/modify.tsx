@@ -12,11 +12,15 @@ const customerSchema = z.object({
 
 export type CustomerInput = TypeOf<typeof customerSchema>;
 
+/**
+ * 
+ * @returns Modify customer page
+ */
 export default function Modify() {
     const { selectedCustomer, setSelectedCustomer } = useCustomerStore();
     const navigate = useNavigate();
 
-    const modifyCustomer = async (updatedCustomer : Customer) => {
+    const modifyCustomer = async (updatedCustomer: Customer) => {
         try {
             const response = await fetch(`http://localhost:8080/customer`, {
                 method: "PUT",

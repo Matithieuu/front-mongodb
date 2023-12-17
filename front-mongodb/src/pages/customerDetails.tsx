@@ -2,6 +2,10 @@ import { Typography, Box, Paper, List, ListItem, ListItemText, Button, Container
 import { useCustomerStore } from '../store/customerStore';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * 
+ * @returns Customer details page
+ */
 export default function CompanyPage() {
     const { selectedCustomer } = useCustomerStore();
     const navigate = useNavigate();
