@@ -4,8 +4,7 @@
 
 <img src="https://github.com/get-icon/geticon/raw/master/icons/mongodb-icon.svg" alt="Mongo Icon" width="100" height="100"/>
 <img src="https://github.com/get-icon/geticon/raw/master/icons/react.svg" alt="React Icon" width="100" height="100"/>
-<img src="https://github.com/get-icon/geticon/raw/master/icons/typescript-icon.svg
-" alt="TypeScript Icon" width="100" height="100"/>
+<img src="https://github.com/get-icon/geticon/raw/master/icons/typescript-icon.svg" alt="TypeScript Icon" width="100" height="100"/>
 <img src="https://github.com/get-icon/geticon/raw/master/icons/fastify-icon.svg" alt="Fastify Icon" width="100" height="100"/>
 
 
